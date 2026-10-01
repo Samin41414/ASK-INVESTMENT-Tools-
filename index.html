@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASK INVESTMENT - Internal Management & Data Portal</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Splash Screen / Intro Animation -->
+    <div id="splash-screen" class="splash-screen">
+        <div class="splash-content">
+            <h1 class="splash-title">ASK INVESTMENT</h1>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Website Content -->
+    <div id="main-content" class="main-content">
+        <!-- Top Navigation Bar (White Head) -->
+        <header class="navbar">
+            <div class="nav-brand">
+                <img src="logo.jpg" alt="ASK INVESTMENT Logo" class="brand-logo">
+                <span class="brand-title">ASK INVESTMENT</span>
+            </div>
+        </header>
+
+        <!-- Hero / Home Section -->
+        <section class="hero-section">
+            <div class="hero-content-box">
+                <div class="hero-badge"><i class="fa-solid fa-lock"></i> Internal Portal & Restricted Access</div>
+                <h1>Internal Operations, Management & Data System</h1>
+                <p>This platform is exclusively built and maintained for internal corporate use. Authorized personnel can manage company data, monitor agent workflows, execute operational tools, and oversee strategic management metrics in a secure environment.</p>
+                <div class="hero-buttons">
+                    <button class="btn-primary" onclick="location.href='agent.html'">Access Dashboard <i class="fa-solid fa-arrow-right"></i></button>
+                    <button class="btn-outline" onclick="location.href='tools.html'">Explore Tools</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Highlights Section (3 requested sections) -->
+        <section class="features-container">
+            <div id="management" class="feature-card">
+                <div class="card-icon"><i class="fa-solid fa-users-gear"></i></div>
+                <h3>Management Information</h3>
+                <p>Access executive structures, operational management metrics, performance analytics, and internal company reports securely.</p>
+                <a href="#" class="card-link">View Reports <i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+
+            <div id="tools" class="feature-card" style="cursor: pointer;" onclick="location.href='tools.html'">
+                <div class="card-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                <h3>Tools</h3>
+                <p>Utilize integrated internal calculation utilities, quotation generators, document managers, and administrative systems.</p>
+                <a href="tools.html" class="card-link">Explore Tools Hub <i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+
+            <div id="dashboard" class="feature-card" style="cursor: pointer;" onclick="location.href='agent.html'">
+                <div class="card-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                <h3>Agent Dashboard</h3>
+                <p>Track live sales pipelines, institutional client visits, proposal statuses, and individual field activity records.</p>
+                <a href="agent.html" class="card-link">Launch Dashboard <i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 ASK INVESTMENT. Internal Management System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+</body>
+</html>

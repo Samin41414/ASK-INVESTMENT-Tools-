@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotation Form - ASK INVESTMENT</title>
+    <style>
+        :root {
+            --primary-color: #0b2545; /* Corporate Dark Blue */
+            --secondary-color: #eef4fb; /* Light Blue Accent */
+            --accent-color: #d4af37; /* Gold/Accent */
+            --text-color: #222222;
+            --border-color: #cccccc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 8px;
+            background-color: #f4f7f6;
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 12px 15px 8px 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-height: 96vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .main-content {
+            flex: 1;
+        }
+
+        /* Header Styling */
+        .header {
+            position: relative;
+            width: 100%;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
+            margin-bottom: 6px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-container {
+            margin-bottom: 2px;
+            text-align: center;
+        }
+
+        .header-logo {
+            max-height: 50px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .company-name {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        .company-slogan {
+            font-size: 11px;
+            color: #d32f2f; /* Red Color for entire slogan */
+            margin-top: 1px;
+            font-weight: 700;
+        }
+
+        .generate-date {
+            position: absolute;
+            top: 2px;
+            right: 5px;
+            font-size: 10.5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Quotation Title & Dynamic Capacity Selection */
+        .quotation-title {
+            text-align: center;
+            margin: 4px 0 6px 0;
+        }
+
+        .quotation-title h2 {
+            margin: 0 0 4px 0;
+            color: var(--primary-color);
+            font-size: 14.5px;
+            text-transform: uppercase;
+        }
+
+        .capacity-selector {
+            display: inline-flex;
+            gap: 5px;
+            background: #eef4fb;
+            padding: 2px 4px;
+            border-radius: 6px;
+            border: 1px solid #cce0f5;
+        }
+
+        .capacity-btn {
+            background-color: #ffffff;
+            border: 1px solid #b0bec5;
+            color: #333;
+            padding: 2px 10px;
+            font-size: 11.5px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .capacity-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 2px 6px rgba(11, 37, 69, 0.3);
+        }
+
+        .print-capacity-title {
+            display: none;
+            font-size: 14.5px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Form Sections */
+        .section-heading {
+            background-color: var(--primary-color);
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color: white;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-top: 6px;
+            margin-bottom: 4px;
+        }
+
+        /* Grid for Client Details & Requirements */
+        .grid-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4px 10px;
+            background-color: #fafafa;
+            padding: 6px 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group label {
+            width: 110px;
+            font-weight: bold;
+            font-size: 10.5px;
+        }
+
+        .form-group input, .form-group .print-value {
+            flex: 1;
+            padding: 2px 5px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 10.5px;
+            font-family: inherit;
+            box-sizing: border-box;
+            text-align: left !important; /* Client details inputs left-aligned */
+        }
+
+        .form-group input[readonly] {
+            background-color: #e9ecef;
+            color: #495057;
+            font-weight: bold;
+            cursor: not-allowed;
+        }
+
+        /* Tables Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 3px;
+            margin-bottom: 3px;
+            table-layout: auto;
+        }
+
+        table th, table td {
+            border: 1px solid var(--border-color);
+            padding: 4px 6px;
+            text-align: left;
+            font-size: 10.5px;
+        }
+
+        table th {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Technical Specifications Table Content Centered */
+        #liftTable td, #liftTable th {
+            text-align: center !important;
+        }
+
+        table td input {
+            width: 100%;
+            padding: 2px;
+            border: 1px solid transparent;
+            box-sizing: border-box;
+            font-size: 10.5px;
+            font-family: inherit;
+            text-align: center !important; /* Technical specs table input text middle/center */
+        }
+
+        table td input:focus {
+            border: 1px solid var(--primary-color);
+            outline: none;
+            background-color: #fff;
+        }
+
+        table td input[readonly] {
+            background-color: transparent;
+            color: inherit;
+            cursor: default;
+        }
+
+        .btn-add {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 3px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        .btn-remove {
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            padding: 2px 4px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 9px;
+        }
+
+        /* Payment & Special Note */
+        .payment-box, .note-box {
+            background-color: #fffde7;
+            border-left: 4px solid var(--accent-color);
+            padding: 5px 8px;
+            font-size: 10px;
+            line-height: 1.3;
+            margin-bottom: 4px;
+        }
+
+        .payment-box ul, .note-box ul {
+            margin: 0;
+            padding-left: 14px;
+        }
+
+        .payment-box li, .note-box li {
+            margin-bottom: 1px;
+        }
+
+        .vat-note {
+            font-size: 10px;
+            font-style: italic;
+            font-weight: bold;
+            color: #333;
+            margin-top: 14px;
+            margin-bottom: 4px;
+            text-align: left;
+        }
+
+        /* Price Summary Table */
+        #priceTable td {
+            padding: 4px 6px;
+            font-weight: 600;
+        }
+
+        #priceTable input {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        /* Price table print alignment fix */
+        #priceTable .print-value {
+            text-align: right;
+            display: none;
+        }
+
+        /* Bottom Section: Left Image (2x3 inch) & Right Signature */
+        .bottom-section-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin: 6px 0;
+        }
+
+        .image-box {
+            width: 3in;
+            height: 2in;
+            border: 2px dashed var(--border-color);
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background-color: #ffffff;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .image-box input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        .image-box img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            background-color: #ffffff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        .image-placeholder-text {
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+            padding: 0 5px;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .signature-area {
+            width: 200px;
+            text-align: center;
+        }
+
+        .signature-line {
+            border-top: 1px solid #333;
+            margin-bottom: 4px;
+        }
+
+        .signature-text {
+            font-size: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Footer Office Address Section - Border on Top only */
+        .document-footer {
+            margin-top: 6px;
+            padding-top: 5px;
+            border-top: 2px solid #000;
+            border-bottom: none;
+            font-size: 9.5px;
+            color: #111;
+            line-height: 1.3;
+            background: #fff;
+        }
+
+        .footer-line-item {
+            white-space: nowrap;
+        }
+
+        .footer-line-item strong {
+            font-weight: 800;
+            color: #000;
+        }
+
+        .action-bar {
+            margin-top: 6px;
+            text-align: center;
+        }
+
+        .btn-print {
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Print Media Styles */
+        @media print {
+            @page { size: A4 portrait; margin: 5mm; }
+            body { background-color: #fff; padding: 0; }
+            .container { 
+                box-shadow: none; 
+                padding: 0; 
+                max-width: 100%; 
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+            .main-content { flex: 1; }
+            .btn-add, .btn-remove, .action-bar, .capacity-selector, .image-box input[type="file"] { display: none !important; }
+            .print-capacity-title { display: block !important; margin-top: 2px; }
+            input { border: none !important; background: transparent !important; }
+            .print-value { display: block !important; border: none !important; background: transparent !important; padding: 2px 0 !important; }
+            /* Client Details print values left-aligned */
+            .grid-details .print-value { text-align: left !important; }
+            /* Technical Specs table print values center-aligned */
+            #liftTable .print-value { text-align: center !important; display: block !important; }
+            #priceTable .print-value { text-align: right !important; }
+            input[type="text"], input[type="number"], input[type="email"] { display: none !important; }
+            .image-box { border: 1px solid #ccc !important; background: #fff !important; }
+            .document-footer { 
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important; 
+                position: relative;
+                margin-top: auto;
+                width: 100%; 
+            }
+        }
+
+        .print-value {
+            display: none;
+            word-break: break-word;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="main-content">
+        <!-- Header with Logo -->
+        <div class="header">
+            <div class="generate-date" id="generateDate"></div>
+            <div class="logo-container">
+                <img src="logo.jpg" alt="ASK INVESTMENT Logo" class="header-logo" id="logoImg" onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='block';">
+                <div id="logoFallback" style="display:none; font-size:12px; font-weight:bold; color:#0b2545; border:1px dashed #0b2545; padding:4px 10px;">[ ASK INVESTMENT ]</div>
+            </div>
+            <h1 class="company-name">ASK INVESTMENT</h1>
+            <div class="company-slogan">Bangladesh.... Global Investment Destination</div>
+        </div>
+
+        <!-- Quotation Title with Dynamic Capacity Selection -->
+        <div class="quotation-title">
+            <h2>COMMERCIAL QUOTATION FOR ELEVATOR</h2>
+            <div class="capacity-selector">
+                <button type="button" class="capacity-btn active" onclick="selectCapacity('450 KG', this)">450 KG</button>
+                <button type="button" class="capacity-btn" onclick="selectCapacity('630 KG', this)">630 KG</button>
+            </div>
+            <div class="print-capacity-title" id="selectedCapacityPrint">CAPACITY: 450 KG</div>
+        </div>
+
+        <!-- CLIENT DETAILS -->
+        <div class="section-heading">CLIENT DETAILS</div>
+        <div class="grid-details">
+            <div class="form-group">
+                <label>Quotation No:</label>
+                <input type="text" id="qNo" readonly style="text-align: left !important;">
+                <span class="print-value" id="qNoPrint" style="text-align: left !important;"></span>
+            </div>
+            <div class="form-group">
+                <label>Date:</label>
+                <input type="text" id="qDate" value="" placeholder="DD/MM/YYYY" oninput="syncPrint(this)" style="text-align: left !important;">
+                <span class="print-value" id="qDatePrintVal" style="text-align: left !important;"></span>
+            </div>
+            <div class="form-group">
+                <label>Client Name:</label>
+                <input type="text" id="clientName" placeholder="Customer Name" oninput="updateClientTitle(this)" style="text-align: left !important;">
+                <span class="print-value" id="clientNamePrintVal" style="text-align: left !important;"></span>
+            </div>
+            <div class="form-group">
+                <label>Contact No:</label>
+                <input type="text" id="clientPhone" placeholder="+8801XXXXXXXXX" oninput="syncPrint(this)" style="text-align: left !important;">
+                <span class="print-value" id="clientPhonePrintVal" style="text-align: left !important;"></span>
+            </div>
+            <div class="form-group">
+                <label>Email Address:</label>
+                <input type="email" id="clientEmail" placeholder="client@example.com" oninput="syncPrint(this)" style="text-align: left !important;">
+                <span class="print-value" id="clientEmailPrintVal" style="text-align: left !important;"></span>
+            </div>
+            <div class="form-group">
+                <label>Address:</label>
+                <input type="text" id="clientAddress" placeholder="Building/Site Location" oninput="syncPrint(this)" style="text-align: left !important;">
+                <span class="print-value" id="clientAddressPrintVal" style="text-align: left !important;"></span>
+            </div>
+        </div>
+
+        <!-- Technical Specifications Table -->
+        <div class="section-heading" id="techSpecHeading">TECHNICAL SPECIFICATIONS & REQUIREMENTS - FOR (CLIENT)</div>
+        <table id="liftTable">
+            <thead>
+                <tr>
+                    <th style="width: 5%; text-align: center;">No.</th>
+                    <th style="width: 25%; text-align: center;">Building Type</th>
+                    <th style="width: 15%; text-align: center;">Total Floor</th>
+                    <th style="width: 20%; text-align: center;">Elevator Weight</th>
+                    <th style="width: 15%; text-align: center;">Brand & Origin</th>
+                    <th style="width: 20%; text-align: center;">Model</th>
+                    <th style="width: 0%; display:none;" class="btn-remove-col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align:center;">1</td>
+                    <td style="text-align:center;">
+                        <input type="text" id="tableBldgType" value="" placeholder="e.g. Residential" oninput="syncPrint(this)">
+                        <span class="print-value" style="text-align: center !important;"></span>
+                    </td>
+                    <td style="text-align:center;">
+                        <input type="text" id="tableTotalFloor" value="" placeholder="e.g. G + 7" oninput="syncPrint(this)">
+                        <span class="print-value" style="text-align: center !important;"></span>
+                    </td>
+                    <td style="text-align:center;">
+                        <input type="text" id="tableCapacityInput" value="450 KG" oninput="syncPrint(this)">
+                        <span class="print-value" id="tableCapacityPrint" style="text-align: center !important;">450 KG</span>
+                    </td>
+                    <td style="text-align:center;">
+                        <input type="text" value="Xio Lift (China)" readonly oninput="syncPrint(this)">
+                        <span class="print-value" style="text-align: center !important;">Xio Lift (China)</span>
+                    </td>
+                    <td style="text-align:center;">
+                        <input type="text" value="" placeholder="e.g. Passenger Elevator" oninput="syncPrint(this)">
+                        <span class="print-value" style="text-align: center !important;"></span>
+                    </td>
+                    <td style="display:none;" class="btn-remove-col">
+                        <button class="btn-remove" onclick="removeRow(this)">X</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn-add" onclick="addLiftRow()">+ Add Lift Specs</button>
+
+        <!-- 2 Space Gaps Here -->
+        <br><br>
+
+        <!-- Commercial / Price Summary -->
+        <div class="section-heading">FINANCIAL SUMMARY</div>
+        <table id="priceTable">
+            <tr>
+                <td style="width: 70%; text-align: right;">Total Equipment Price (BDT):</td>
+                <td style="width: 30%;">
+                    <input type="number" id="equipPrice" value="" placeholder="0" oninput="calculateTotal()">
+                    <span class="print-value" id="equipPricePrint"></span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">Installation, Testing & Commissioning (BDT):</td>
+                <td>
+                    <input type="number" id="installPrice" value="" placeholder="0" oninput="calculateTotal()">
+                    <span class="print-value" id="installPricePrint"></span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">Grand Total Amount (BDT):</td>
+                <td>
+                    <input type="text" id="grandTotal" value="" readonly placeholder="0 BDT">
+                    <span class="print-value" id="grandTotalPrint" style="font-size: 10.5px; font-weight: bold; color: var(--primary-color);"></span>
+                </td>
+            </tr>
+        </table>
+
+        <!-- 2 Space Gaps Here after Financial Summary Table -->
+        <br><br>
+
+        <!-- Payment Schedule -->
+        <div class="section-heading">PAYMENT TERMS & SCHEDULE</div>
+        <div class="payment-box">
+            <ul>
+                <li><strong>30% Advance:</strong> Booking & Order Confirmation upon signing the contract.</li>
+                <li><strong>20% Payment:</strong> Upon Bill of Lading (B/L).</li>
+                <li><strong>30% Delivery:</strong> Delivery on site.</li>
+                <li><strong>10% Installation:</strong> Mobilization of installation work.</li>
+                <li><strong>10% Commissioning:</strong> Completion of Testing & Commissioning.</li>
+            </ul>
+        </div>
+
+        <!-- Terms & Conditions -->
+        <div class="section-heading">TERMS & CONDITIONS</div>
+        <div class="note-box">
+            <ul>
+                <li><strong>Delivery Time:</strong> 105 days from the date of receiving advance payment & layout approval.</li>
+                <li><strong>Annual Maintenance:</strong> First Year Annual maintenance completely free.</li>
+                <li><strong>Warranty:</strong> 1 (One) Year free service and warranty for components (excluding natural disaster & power grid failure).</li>
+                <li><strong>Client Responsibility:</strong> Scaffolding, 3-Phase Power supply at shaft top, and civil construction of the hoistway/pit.</li>
+                <li><strong>Validity:</strong> This quotation is valid for 14 days from the date of issuance.</li>
+            </ul>
+            <div class="vat-note">
+                (Please note that the prices mentioned above are exclusive of VAT, which will be calculated and added to the invoice.)
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <!-- Bottom Section: Left side single 2x3 inch image box & Right side customer signature -->
+        <div class="bottom-section-wrapper">
+            <div class="image-box" onclick="this.querySelector('input').click()">
+                <input type="file" accept="image/*" onchange="previewImage(event, 'liftImg1', this)">
+                <span class="image-placeholder-text">Click to add Lift Image (3x2 in)</span>
+                <img id="liftImg1" alt="Lift Preview">
+            </div>
+            <div class="signature-area">
+                <div class="signature-line"></div>
+                <div class="signature-text">Customer Signature</div>
+            </div>
+        </div>
+
+        <!-- Footer Office Address Section (Line on TOP of Address) -->
+        <div class="document-footer">
+            <div class="footer-line-item">
+                <strong>Head Office:</strong> 14/1, Flat-1A, North Paik Para, Mirpur-1, Dhaka-1216, Bangladesh.
+            </div>
+            <div class="footer-line-item">
+                <strong>Corporate Office:</strong> Display Yard, Plot No: 15-107-006, Stall No : 4 & 6, Sector 15, Jalshiri Abashon, Bangladesh.
+            </div>
+        </div>
+
+        <!-- Print Action Button -->
+        <div class="action-bar">
+            <button class="btn-print" onclick="window.print()">Print / Save as PDF</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Generate Automated Short Quotation Number & Set Today's Date
+    function generateQuotationNo() {
+        const dateObj = new Date();
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const randomNum = Math.floor(100 + Math.random() * 900); // 3 digit random number
+        
+        const autoQNo = `ASK-${day}${month}-${randomNum}`;
+        document.getElementById('qNo').value = autoQNo;
+        document.getElementById('qNoPrint').innerText = autoQNo;
+
+        // Set Date
+        const year = dateObj.getFullYear();
+        const dateStr = `${day}/${month}/${year}`;
+        document.getElementById('generateDate').innerText = "Date: " + dateStr;
+        document.getElementById('qDate').value = dateStr;
+        const qDatePrintVal = document.getElementById('qDatePrintVal');
+        if(qDatePrintVal) qDatePrintVal.innerText = dateStr;
+    }
+
+    // Dynamic Client Name Update in Heading Formatted as FOR (CLIENT)
+    function updateClientTitle(input) {
+        syncPrint(input);
+        const nameVal = input.value.trim();
+        const headingEl = document.getElementById('techSpecHeading');
+        if (nameVal !== "") {
+            headingEl.innerText = `TECHNICAL SPECIFICATIONS & REQUIREMENTS - FOR (${nameVal.toUpperCase()})`;
+        } else {
+            headingEl.innerText = `TECHNICAL SPECIFICATIONS & REQUIREMENTS - FOR (CLIENT)`;
+        }
+    }
+
+    // Function to handle capacity selection
+    function selectCapacity(capacity, btnElement) {
+        // Toggle Active Button Styling
+        const buttons = document.querySelectorAll('.capacity-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+
+        // Update Title for Print
+        document.getElementById('selectedCapacityPrint').innerText = "CAPACITY: " + capacity;
+
+        // Update Table Input & Print Span automatically
+        const capInput = document.getElementById('tableCapacityInput');
+        const capPrint = document.getElementById('tableCapacityPrint');
+        if (capInput && capPrint) {
+            capInput.value = capacity;
+            capPrint.innerText = capacity;
+        }
+    }
+
+    function syncPrint(input) {
+        const printSpan = input.nextElementSibling;
+        if (printSpan && printSpan.classList.contains('print-value')) {
+            printSpan.innerText = input.value;
+        }
+    }
+
+    function addLiftRow() {
+        const table = document.getElementById('liftTable').getElementsByTagName('tbody')[0];
+        const rowCount = table.rows.length + 1;
+        const activeCapacity = document.querySelector('.capacity-btn.active').innerText;
+        const row = table.insertRow();
+        row.innerHTML = `
+            <td style="text-align:center;">${rowCount}</td>
+            <td style="text-align:center;"><input type="text" placeholder="e.g. Residential" oninput="syncPrint(this)"><span class="print-value" style="text-align: center !important;"></span></td>
+            <td style="text-align:center;"><input type="text" placeholder="e.g. G + 7" oninput="syncPrint(this)"><span class="print-value" style="text-align: center !important;"></span></td>
+            <td style="text-align:center;"><input type="text" value="${activeCapacity}" oninput="syncPrint(this)"><span class="print-value" style="text-align: center !important;">${activeCapacity}</span></td>
+            <td style="text-align:center;"><input type="text" value="Xio Lift (China)" readonly oninput="syncPrint(this)"><span class="print-value" style="text-align: center !important;">Xio Lift (China)</span></td>
+            <td style="text-align:center;"><input type="text" placeholder="Model" oninput="syncPrint(this)"><span class="print-value" style="text-align: center !important;"></span></td>
+            <td style="display:none;" class="btn-remove-col"><button class="btn-remove" onclick="removeRow(this)">X</button></td>
+        `;
+    }
+
+    function removeRow(btn) {
+        const row = btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+    }
+
+    function calculateTotal() {
+        const equip = parseFloat(document.getElementById('equipPrice').value) || 0;
+        const install = parseFloat(document.getElementById('installPrice').value) || 0;
+        const total = equip + install;
+
+        if (total > 0) {
+            const formattedEquip = equip > 0 ? equip.toLocaleString('en-IN') + " BDT" : "";
+            const formattedInstall = install > 0 ? install.toLocaleString('en-IN') + " BDT" : "";
+            const formattedTotal = total.toLocaleString('en-IN') + " BDT";
+
+            document.getElementById('equipPrice').value = equip > 0 ? equip : "";
+            document.getElementById('installPrice').value = install > 0 ? install : "";
+            document.getElementById('grandTotal').value = formattedTotal;
+
+            document.getElementById('equipPricePrint').innerText = formattedEquip;
+            document.getElementById('installPricePrint').innerText = formattedInstall;
+            document.getElementById('grandTotalPrint').innerText = formattedTotal;
+        } else {
+            document.getElementById('equipPrice').value = "";
+            document.getElementById('installPrice').value = "";
+            document.getElementById('grandTotal').value = "";
+            document.getElementById('equipPricePrint').innerText = "";
+            document.getElementById('installPricePrint').innerText = "";
+            document.getElementById('grandTotalPrint').innerText = "";
+        }
+    }
+
+    // Image Upload Preview Function with perfect centering & auto-fit bounding
+    function previewImage(event, imgId, inputElement) {
+        const reader = new FileReader();
+        reader.onload = function(){
+            const output = document.getElementById(imgId);
+            output.src = reader.result;
+            output.style.display = 'block';
+            
+            // Hide placeholder text and set clean background box
+            const placeholder = inputElement.parentElement.querySelector('.image-placeholder-text');
+            if(placeholder) placeholder.style.display = 'none';
+        };
+        if(event.target.files[0]) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    }
+
+    // Initialize Automated Number & Print Spans
+    generateQuotationNo();
+    document.querySelectorAll('input').forEach(input => {
+        if(input.type !== 'file') syncPrint(input);
+    });
+</script>
+
+</body>
+</html>
