@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lift Sales Progress Monitor - ASK INVESTMENT</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- EmailJS SDK CDN -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init("L-CcShK10cZm_B0Yd");
+        })();
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-[#0b0f17] text-slate-100 font-['Inter'] min-h-screen p-4 md:p-8 antialiased selection:bg-cyan-500 selection:text-black">
+
+    <div class="max-w-7xl mx-auto space-y-8">
+        
+        <!-- Header Banner -->
+        <div class="relative overflow-hidden bg-[#111827]/80 backdrop-blur-xl p-6 md:p-8 rounded-2xl border border-slate-800/80 shadow-2xl">
+            <div class="absolute -top-12 -right-12 w-56 h-56 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-12 -left-12 w-56 h-56 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold mb-3">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Executive Tracker
+                    </div>
+                    <h1 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+                        Lift Sales Progress Monitor
+                    </h1>
+                    <p class="text-slate-400 text-sm mt-1">Real-time pipeline analysis and opportunity tracking</p>
+                </div>
+                
+                <div class="flex items-center gap-3 flex-wrap">
+                    <button onclick="location.href='index.html'" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-slate-700">
+                        ← Main Home
+                    </button>
+                    <button onclick="openGuidelinesModal()" class="flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-lg shadow-cyan-600/20 transition transform hover:-translate-y-0.5 border border-cyan-400/20">
+                        View Guidelines & Briefing
+                    </button>
+                    <button onclick="openAgentListPage()" class="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-lg shadow-emerald-600/20 transition transform hover:-translate-y-0.5 border border-emerald-400/20">
+                        Agent Profile Directory
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Management Summary Cards (KPIs) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div class="bg-[#111827]/80 backdrop-blur-md p-5 rounded-xl border border-slate-800/80 border-l-4 border-l-cyan-500 shadow-xl">
+                <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Active Projects</span>
+                <div id="totalProjects" class="text-3xl font-extrabold text-white mt-2">0</div>
+            </div>
+            <div class="bg-[#111827]/80 backdrop-blur-md p-5 rounded-xl border border-slate-800/80 border-l-4 border-l-sky-500 shadow-xl">
+                <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Total Lifts Demand</span>
+                <div id="totalLifts" class="text-3xl font-extrabold text-white mt-2">0</div>
+            </div>
+            <div class="bg-[#111827]/80 backdrop-blur-md p-5 rounded-xl border border-slate-800/80 border-l-4 border-l-fuchsia-500 shadow-xl">
+                <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">In Progress</span>
+                <div id="inProgressLifts" class="text-3xl font-extrabold text-white mt-2">0</div>
+            </div>
+            <div class="bg-[#111827]/80 backdrop-blur-md p-5 rounded-xl border border-slate-800/80 border-l-4 border-l-amber-500 shadow-xl">
+                <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Confirmed Lifts</span>
+                <div id="confirmedLifts" class="text-3xl font-extrabold text-white mt-2">0</div>
+            </div>
+            <div class="bg-[#111827]/80 backdrop-blur-md p-5 rounded-xl border border-slate-800/80 border-l-4 border-l-emerald-500 shadow-xl">
+                <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Orders Received</span>
+                <div id="ordersReceived" class="text-3xl font-extrabold text-white mt-2">0</div>
+            </div>
+        </div>
+
+        <!-- Add / Edit Project Form -->
+        <div class="bg-[#111827]/80 backdrop-blur-md p-6 rounded-2xl border border-slate-800/80 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h2 id="formTitle" class="text-base font-bold text-slate-200">Add New Lift Opportunity</h2>
+                <button id="cancelEditBtn" onclick="resetForm()" class="hidden text-xs text-rose-400 hover:text-rose-300 underline font-medium">Cancel Edit</button>
+            </div>
+            <form id="projectForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <input type="hidden" id="projectId">
+                <input type="text" id="salesperson" placeholder="Salesperson / Agent Name" required class="bg-[#0b0f17] border border-slate-800 text-slate-200 placeholder-slate-500 p-2.5 rounded-xl text-xs focus:ring-2 focus:ring-cyan-500 focus:outline-none transition">
+                <input type="text" id="customerName" placeholder="Customer Name" required class="bg-[#0b0f17] border border-slate-800 text-slate-200 placeholder-slate-500 p-2.5 rounded-xl text-xs focus:ring-2 focus:ring-cyan-500 focus:outline-none transition">
+                <input type="text" id="projectName" placeholder="Project Name & Location" required class="bg-[#0b0f17] border border-slate-800 text-slate-200 placeholder-slate-500 p-2.5 rounded-xl text-xs focus:ring-2 focus:ring-cyan-500 focus:outline-none transition">
+                <input type="text" id="contactPerson" placeholder="Contact Person & Phone (e.g. 017xxxxxxxx)" required class="bg-[#0b0f17] border border-slate-800 text-slate-200 placeholder-slate-500 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-cyan-500 focus:outline-none transition">
+                <input type="number" id="liftQty" placeholder="Lift Requirement (Qty)" required class="bg-[#0b0f17] border border-slate-800 text-slate-200 placeholder-slate-500 p-2.5 rounded-xl text-xs focus:ring-2 focus:ring-cyan-500 focus:outline-none transition">
+                <input type="text" id="liftDetails" placeholder="Lift Capacity & Details (e.g. 630kg, 8 Persons)" required class="bg-[#0b0f17] border border-slate-800 text-slate-200 placeholder-slate-500 p-2.5 rounded-xl text-xs focus:ring-2 focus:ring-cyan-500 focus:outline-none transition">
+                <select id="status" class="bg-[#0b0f17] border border-slate-800 text-slate-200 p-2.5 rounded-xl text-xs focus:ring-2 focus:ring-cyan-500 focus:outline-none transition">
+                    <option value="Initial Contact / Inquiry">Initial Contact / Inquiry</option>
+                    <option value="Quotation / Negotiation">Quotation / Negotiation</option>
+                    <option value="Awaiting Confirmation">Awaiting Confirmation</option>
+                    <option value="Confirmed / Order Placed">Confirmed / Order Placed</option>
+                    <option value="Delivery Planning">Delivery Planning</option>
+                </select>
+                <input type="date" id="targetDate" required class="bg-[#0b0f17] border border-slate-800 text-slate-400 p-2.5 rounded-xl text-xs focus:ring-2 focus:ring-cyan-500 focus:outline-none transition">
+                
+                <div class="sm:col-span-2 lg:col-span-4 flex justify-end mt-2">
+                    <button type="submit" id="submitBtn" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold px-6 py-2.5 rounded-xl text-xs transition duration-200 shadow-lg shadow-cyan-600/20 border border-cyan-400/20">
+                        + Add Opportunity
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Main Pipeline Table -->
+        <div class="bg-[#111827]/80 backdrop-blur-md rounded-2xl border border-slate-800/80 shadow-2xl overflow-hidden">
+            <div class="p-5 border-b border-slate-800 flex justify-between items-center bg-[#131b2e]/60">
+                <h2 class="text-base font-bold text-slate-200">Active Pipeline Monitoring Table</h2>
+                <span class="text-xs text-slate-500 font-medium">Main Tracker</span>
+            </div>
+            
+            <div class="p-4 overflow-x-auto">
+                <table class="w-full text-left text-xs text-slate-300 border-separate border-spacing-y-2">
+                    <thead>
+                        <tr class="text-cyan-400 uppercase text-[10px] tracking-wider">
+                            <th class="py-3 px-4 bg-[#0b0f17] border border-slate-800 rounded-l-xl font-bold">Sl</th>
+                            <th class="py-3 px-4 bg-[#0b0f17] border border-slate-800 font-bold">Salesperson</th>
+                            <th class="py-3 px-4 bg-[#0b0f17] border border-slate-800 font-bold">Customer & Project</th>
+                            <th class="py-3 px-4 bg-[#0b0f17] border border-slate-800 font-bold">Contact & Phone</th>
+                            <th class="py-3 px-4 bg-[#0b0f17] border border-slate-800 font-bold text-center">Qty</th>
+                            <th class="py-3 px-4 bg-[#0b0f17] border border-slate-800 font-bold">Capacity & Specs</th>
+                            <th class="py-3 px-4 bg-[#0b0f17] border border-slate-800 font-bold">Status Update</th>
+                            <th class="py-3 px-4 bg-[#0b0f17] border border-slate-800 font-bold">Target Date</th>
+                            <th class="py-3 px-4 bg-[#0b0f17] border border-slate-800 font-bold text-right rounded-r-xl">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salesTableBody" class="divide-y divide-slate-800/40">
+                        <!-- Dynamic Rows -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- AGENT DIRECTORY MODAL -->
+    <div id="agentListPage" class="fixed inset-0 z-50 flex items-center justify-center bg-[#070a0f]/90 backdrop-blur-md hidden p-4 overflow-y-auto">
+        <div class="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto shadow-2xl p-6 md:p-8 space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-xl font-extrabold text-white">Agent Profile Directory</h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Click on any agent's card to view details</p>
+                </div>
+                <button onclick="closeAgentListPage()" class="text-slate-400 hover:text-white bg-slate-800 px-3.5 py-2 rounded-xl text-xs font-semibold transition">✕ Close Directory</button>
+            </div>
+
+            <form id="agentForm" class="bg-[#0b0f17] p-5 rounded-xl border border-slate-800 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 id="agentFormTitle" class="text-xs font-bold text-cyan-400 uppercase tracking-wider">+ Add New Agent</h3>
+                    <button type="button" onclick="resetAgentForm()" id="cancelAgentEditBtn" class="hidden text-xs text-rose-400 hover:text-rose-300 underline font-medium">Cancel Edit</button>
+                </div>
+                <input type="hidden" id="agentId">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input type="text" id="agentName" required placeholder="Agent Full Name" class="w-full bg-[#111827] border border-slate-800 text-slate-200 p-2.5 rounded-xl text-xs">
+                    <input type="text" id="agentPhone" required placeholder="Phone Number" class="w-full bg-[#111827] border border-slate-800 text-slate-200 p-2.5 rounded-xl text-xs">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Profile Photo</label>
+                        <input type="file" id="agentPhoto" accept="image/*" class="w-full text-xs text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-cyan-600 file:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">NID Photo</label>
+                        <input type="file" id="agentNid" accept="image/*" class="w-full text-xs text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-cyan-600 file:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Agreement Photo</label>
+                        <input type="file" id="agentAgreement" accept="image/*" class="w-full text-xs text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-cyan-600 file:text-white">
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-2">
+                    <button type="submit" id="agentSubmitBtn" class="bg-cyan-600 hover:bg-cyan-500 text-white font-semibold px-5 py-2 rounded-xl text-xs">
+                        + Save Agent Profile
+                    </button>
+                </div>
+            </form>
+
+            <div id="agentCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Dynamic Agent Cards -->
+            </div>
+        </div>
+    </div>
+
+    <!-- AGENT DETAIL MODAL -->
+    <div id="agentDetailModal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#070a0f]/90 backdrop-blur-md hidden p-4 overflow-y-auto">
+        <div class="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl p-6 md:p-8 space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <button onclick="backToAgentDirectory()" class="text-cyan-400 hover:text-cyan-300 text-xs font-semibold">← Back to Directory</button>
+                <button onclick="closeAgentDetailModal()" class="text-slate-400 hover:text-white bg-slate-800 px-3 py-1.5 rounded-xl text-xs">✕ Close</button>
+            </div>
+            <div id="agentDetailContent" class="space-y-6"></div>
+        </div>
+    </div>
+
+    <!-- IMAGE LIGHTBOX MODAL -->
+    <div id="imageModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md hidden p-4" onclick="closeImageModal()">
+        <div class="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center justify-center">
+            <button onclick="closeImageModal()" class="absolute -top-10 right-0 text-white bg-slate-800 px-3 py-1 rounded-full text-xs">✕ Close Full View</button>
+            <img id="fullViewImage" src="" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl object-contain border border-slate-700">
+        </div>
+    </div>
+
+    <!-- GUIDELINES MODAL -->
+    <div id="guidelinesModal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#070a0f]/90 backdrop-blur-md hidden p-4 overflow-y-auto">
+        <div class="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-7xl max-h-[90vh] overflow-y-auto shadow-2xl p-6 md:p-8 space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <h2 class="text-xl font-bold text-white">Official Sales Guidelines & Briefing Reference</h2>
+                <button onclick="closeGuidelinesModal()" class="text-slate-400 hover:text-white bg-slate-800 px-3 py-1.5 rounded-xl text-xs">✕ Close</button>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 text-xs text-slate-300">
+                <div class="bg-[#0b0f17] p-5 rounded-xl border border-slate-800">
+                    <h3 class="font-bold text-white mb-2">Items to Monitor</h3>
+                    <p class="text-slate-400">Customer name, project name, location, contact phone, lift quantity, capacity, technical specifications, conversation status, target dates, and delivery timelines.</p>
+                </div>
+                <div class="bg-[#0b0f17] p-5 rounded-xl border border-slate-800">
+                    <h3 class="font-bold text-white mb-2">Sales Status Categories</h3>
+                    <p class="text-slate-400">Initial Contact / Inquiry, Quotation / Negotiation, Awaiting Confirmation, Confirmed / Order Placed, Delivery Planning.</p>
+                </div>
+                <div class="bg-[#0b0f17] p-5 rounded-xl border border-slate-800">
+                    <h3 class="font-bold text-white mb-2">Management Summary</h3>
+                    <p class="text-slate-400">Monitor active projects, total lift demand, in progress deals, confirmed lifts, orders received, and upcoming site deliveries.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openGuidelinesModal() { document.getElementById('guidelinesModal').classList.remove('hidden'); }
+        function closeGuidelinesModal() { document.getElementById('guidelinesModal').classList.add('hidden'); }
+    </script>
+    <script src="script_2.js"></script>
+</body>
+</html>
